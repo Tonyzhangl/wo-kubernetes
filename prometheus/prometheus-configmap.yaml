@@ -12,13 +12,20 @@ data:
     - job_name: 'prometheus'
       static_configs:
         - targets: ['localhost:9090']
+    - job_name: 'kubenetes-cluster'
+      scheme: https
+      tls_config:
+        insecure_skip_verify: true
+      kubernetes_sd_configs:
+      - api_servers: 
+        - 'http://10.139.15.113:8080'
+        role: node
     - job_name: 'kubernetes-nodes-cadvisor'
       tls_config:
-        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        insecure_skip_verify: true
       kubernetes_sd_configs:
       - api_servers:
-        - 'https://10.139.15.113'
+        - 'http://10.139.15.113:8080'
         in_cluster: true
         role: node
       relabel_configs:
@@ -33,11 +40,10 @@ data:
         target_label: __address__
     - job_name: 'kubernetes-apiserver-cadvisor'
       tls_config:
-        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        insecure_skip_verify: true
       kubernetes_sd_configs:
       - api_servers:
-        - 'https://10.139.15.113'
+        - 'http://10.139.15.113:8080'
         in_cluster: true
         role: apiserver
       relabel_configs:
@@ -52,11 +58,10 @@ data:
         target_label: __address__
     - job_name: 'kubernetes-node-exporter'
       tls_config:
-        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        insecure_skip_verify: true
       kubernetes_sd_configs:
       - api_servers:
-        - 'https://10.139.15.113'
+        - 'http://10.139.15.113:8080'
         in_cluster: true
         role: node
       relabel_configs:
